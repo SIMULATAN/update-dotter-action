@@ -3,7 +3,7 @@
 # exit on error
 set -e
 
-cd $0
+cd $1
 
 function download() {
     # -L = follow redirects
