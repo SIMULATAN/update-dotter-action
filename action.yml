@@ -13,8 +13,7 @@ inputs:
   branch-name:
     description: The target branch name of the pull request
     required: false
-    # <default> will get replaced by the default branch of the git repo
-    default: <default>
+    default:
   pull-request-title:
     description: The title of the pull request
     required: false
@@ -92,6 +91,6 @@ runs:
         title: ${{ steps.make-pull-request-title.outputs.outstring }}
         body: ${{ steps.make-pull-request-body.outputs.outstring }}
         labels: ${{ inputs.pull-request-labels }}
-        base: ${{ inputs.branch-name == "<default>" && github.event.repository.default_branch || inputs.branch-name }}
+        base: ${{ inputs.branch-name }}
         branch: ${{ inputs.update-branch-name }}
         commit-message: ${{ steps.make-commit-message.outputs.outstring }}
