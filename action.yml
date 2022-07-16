@@ -1,0 +1,93 @@
+name: Update Dotter
+description: Updates the dotter executeables in your repository
+inputs:
+  commit-message:
+    type: string
+    description: The commit message to use for the updating commit
+    required: false
+    default: "chore(deps): update dotter from {BEFORE} -> {AFTER}"
+  update-branch-name:
+    description: The branch name to use for the updating commit
+    required: false
+    default: update-dotter
+  branch-name:
+    description: The target branch name of the pull request
+    required: false
+    # <default> will get replaced by the default branch of the git repo
+    default: <default>
+  pull-request-title:
+    description: The title of the pull request
+    required: false
+    default: Update dotter from {BEFORE} -> {AFTER}
+  pull-request-body:
+    description: The body of the pull request
+    required: false
+    default: "This pull request updates dotter from {BEFORE} to {AFTER}.\n\n## Changes: {CHANGES}"
+  pull-request-labels:
+    description: The labels of the pull request
+    required: false
+
+outputs:
+  old-version:
+    description: The old version of dotter
+    value: ${{ steps.update-dotter.outputs.old-version }}
+  new-version:
+    description: The new version of dotter
+    value: ${{ steps.update-dotter.outputs.new-version }}
+  pull-request-url:
+    description: The URL of the pull request
+    value: ${{ steps.create-pull-request.outputs.pull-request-url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Update dotter
+      id: update-dotter
+      run: update-dotter.sh
+      shell: bash
+
+    - name: Generate Changelog
+      id: generate-changelog
+      uses: actions/releases-to-changelog@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title-template: '## %%TITLE%%'
+
+    - name: Make pull request body
+      id: make-pull-request-body
+      uses: actions/replace-variables-in-string@1.0.0
+      env:
+        BEFORE: ${{ steps.update-dotter.outputs.old-version }}
+        AFTER: ${{ steps.update-dotter.outputs.new-version }}
+        CHANGES: ${{ steps.generate-changelog.outputs.changelog }}
+      with:
+        instring: ${{ inputs.pull-request-body }}
+
+    - name: Make commit message
+      id: make-commit-message
+      uses: actions/replace-variables-in-string@1.0.0
+      env:
+        BEFORE: ${{ steps.update-dotter.outputs.old-version }}
+        AFTER: ${{ steps.update-dotter.outputs.new-version }}
+      with:
+        instring: ${{ inputs.commit-message }}
+
+    - name: Make pull request title
+      id: make-pull-request-title
+      uses: actions/replace-variables-in-string@1.0.0
+      env:
+        BEFORE: ${{ steps.update-dotter.outputs.old-version }}
+        AFTER: ${{ steps.update-dotter.outputs.new-version }}
+      with:
+        instring: ${{ inputs.pull-request-title }}
+
+    - name: Create pull request
+      id: create-pull-request
+      uses: actions/create-pull-request@v4
+      with:
+        title: ${{ steps.make-pull-request-title.outputs.outstring }}
+        body: ${{ steps.make-pull-request-body.outputs.outstring }}
+        labels: ${{ inputs.pull-request-labels }}
+        base: ${{ inputs.branch-name }}
+        branch: ${{ inputs.update-branch-name }}
+        commit-message: ${{ steps.make-commit-message.outputs.outstring }}
