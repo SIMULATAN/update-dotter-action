@@ -3,6 +3,8 @@
 # exit on error
 set -e
 
+cd $0
+
 function download() {
     # -L = follow redirects
     curl -qL $1 2>/dev/null
