@@ -51,14 +51,14 @@ runs:
 
     - name: Generate Changelog
       id: generate-changelog
-      uses: actions/releases-to-changelog@v1
+      uses: LSVH/gha-releases-to-changelog@v1
       with:
         token: ${{ inputs.token }}
         title-template: '## %%TITLE%%'
 
     - name: Make pull request body
       id: make-pull-request-body
-      uses: actions/replace-variables-in-string@1.0.0
+      uses: AndreasNel/string-vars-action@1.0.0
       env:
         BEFORE: ${{ steps.update-dotter.outputs.old-version }}
         AFTER: ${{ steps.update-dotter.outputs.new-version }}
@@ -68,7 +68,7 @@ runs:
 
     - name: Make commit message
       id: make-commit-message
-      uses: actions/replace-variables-in-string@1.0.0
+      uses: AndreasNel/string-vars-action@1.0.0
       env:
         BEFORE: ${{ steps.update-dotter.outputs.old-version }}
         AFTER: ${{ steps.update-dotter.outputs.new-version }}
@@ -77,7 +77,7 @@ runs:
 
     - name: Make pull request title
       id: make-pull-request-title
-      uses: actions/replace-variables-in-string@1.0.0
+      uses: AndreasNel/string-vars-action@1.0.0
       env:
         BEFORE: ${{ steps.update-dotter.outputs.old-version }}
         AFTER: ${{ steps.update-dotter.outputs.new-version }}
@@ -86,7 +86,7 @@ runs:
 
     - name: Create pull request
       id: create-pull-request
-      uses: actions/create-pull-request@v4
+      uses: peter-evans/create-pull-request@v4.0.4
       with:
         token: ${{ inputs.token }}
         title: ${{ steps.make-pull-request-title.outputs.outstring }}
