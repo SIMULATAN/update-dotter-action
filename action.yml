@@ -43,6 +43,9 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Update Dotter
       id: update-dotter
       run: ${{ github.action_path }}/update-dotter.sh $(pwd)
