@@ -33,7 +33,7 @@ function download_things() {
   fi
 }
 
-echo "::set-output name=old-version::$(./dotter --version 2>/dev/null)"
+echo "::set-output name=old-version::$(chmod +x ./dotter && ./dotter --version 2>/dev/null)"
 # print stderr in red and stdout in green
 download_things 2> >(while read line; do echo -e "\e[01;31m$line\e[0m" >&2; done) 1> >(while read line; do echo -e "\e[01;32m$line\e[0m" >&2; done)
 echo "::set-output name=new-version::$(./dotter --version 2>/dev/null)"
