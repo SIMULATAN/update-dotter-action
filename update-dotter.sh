@@ -3,9 +3,8 @@
 # exit on error
 set -e
 
+# cd into the repo dir
 cd $1
-pwd
-ls
 
 function download() {
     # -L = follow redirects
