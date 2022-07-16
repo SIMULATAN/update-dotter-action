@@ -45,7 +45,7 @@ runs:
   steps:
     - name: Update dotter
       id: update-dotter
-      run: update-dotter.sh
+      run: echo "${{ github.action_path }}" >> $GITHUB_PATH && update-dotter.sh
       shell: bash
 
     - name: Generate Changelog
