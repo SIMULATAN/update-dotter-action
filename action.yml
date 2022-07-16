@@ -43,13 +43,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Set GitHub Action Path
-      run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
-    
     - name: Update Dotter
       id: update-dotter
-      run: update-dotter.sh
+      run: ${{ github.action_path }}/update-dotter.sh
       shell: bash
 
     - name: Generate Changelog
