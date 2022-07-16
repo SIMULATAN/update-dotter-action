@@ -45,7 +45,7 @@ runs:
   steps:
     - name: Update Dotter
       id: update-dotter
-      run: ${{ github.action_path }}/update-dotter.sh $PWD
+      run: ${{ github.action_path }}/update-dotter.sh $(pwd)
       shell: bash
 
     - name: Generate Changelog
