@@ -21,7 +21,7 @@ inputs:
   pull-request-body:
     description: The body of the pull request
     required: false
-    default: "This pull request updates dotter from {BEFORE} to {AFTER}.\n\n## Changes: {CHANGES}"
+    default: "This pull request updates from {BEFORE} to {AFTER}.\n\n## Changes: {CHANGES}"
   pull-request-labels:
     description: The labels of the pull request
     required: false
@@ -53,9 +53,10 @@ runs:
 
     - name: Generate Changelog
       id: generate-changelog
-      uses: LSVH/gha-releases-to-changelog@v1
+      uses: SIMULATAN/gha-releases-to-changelog@add-repo-input
       with:
         token: ${{ inputs.token }}
+        repo: SuperCuber/dotter
         title-template: '## %%TITLE%%'
 
     - name: Make pull request body
