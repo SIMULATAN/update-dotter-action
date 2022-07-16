@@ -59,6 +59,7 @@ runs:
         user: SuperCuber
         repo: dotter
         after-tag: ${{ steps.update-dotter.outputs.old-tag }}
+        title-template: "### %%TITLE%%"
 
     - name: Make pull request body
       id: make-pull-request-body
@@ -66,7 +67,7 @@ runs:
       env:
         BEFORE: ${{ steps.update-dotter.outputs.old-version }}
         AFTER: ${{ steps.update-dotter.outputs.new-version }}
-        CHANGES: ${{ steps.generate-changelog.outputs.changelog }}
+        CHANGES: "\n${{ steps.generate-changelog.outputs.changelog }}"
       with:
         instring: ${{ inputs.pull-request-body }}
 
