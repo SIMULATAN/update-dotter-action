@@ -26,6 +26,9 @@ inputs:
   pull-request-labels:
     description: The labels of the pull request
     required: false
+  token:
+    description: The GitHub token to use
+    required: true
 
 outputs:
   old-version:
@@ -50,7 +53,7 @@ runs:
       id: generate-changelog
       uses: actions/releases-to-changelog@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.token }}
         title-template: '## %%TITLE%%'
 
     - name: Make pull request body
@@ -85,6 +88,7 @@ runs:
       id: create-pull-request
       uses: actions/create-pull-request@v4
       with:
+        token: ${{ inputs.token }}
         title: ${{ steps.make-pull-request-title.outputs.outstring }}
         body: ${{ steps.make-pull-request-body.outputs.outstring }}
         labels: ${{ inputs.pull-request-labels }}
