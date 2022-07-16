@@ -52,6 +52,7 @@ runs:
       shell: bash
 
     - name: Generate Changelog
+      id: generate-changelog
       uses: SIMULATAN/gha-releases-to-changelog@add-repo-input
       with:
         token: ${{ inputs.token }}
