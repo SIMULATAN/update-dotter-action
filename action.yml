@@ -52,12 +52,12 @@ runs:
       shell: bash
 
     - name: Generate Changelog
-      id: generate-changelog
       uses: SIMULATAN/gha-releases-to-changelog@add-repo-input
       with:
         token: ${{ inputs.token }}
-        repo: SuperCuber/dotter
-        title-template: '## %%TITLE%%'
+        user: SuperCuber
+        repo: dotter
+        after-tag: ${{ steps.update-dotter.outputs.old-tag }}
 
     - name: Make pull request body
       id: make-pull-request-body
