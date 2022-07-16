@@ -92,6 +92,6 @@ runs:
         title: ${{ steps.make-pull-request-title.outputs.outstring }}
         body: ${{ steps.make-pull-request-body.outputs.outstring }}
         labels: ${{ inputs.pull-request-labels }}
-        base: ${{ inputs.branch-name }}
+        base: ${{ inputs.branch-name == "<default>" && "" || inputs.branch-name }}
         branch: ${{ inputs.update-branch-name }}
         commit-message: ${{ steps.make-commit-message.outputs.outstring }}
