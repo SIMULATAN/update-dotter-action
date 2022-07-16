@@ -4,7 +4,8 @@
 set -e
 
 cd $1
-echo FIRST: $1
+pwd
+ls
 
 function download() {
     # -L = follow redirects
